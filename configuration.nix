@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 
 {
+  ###########################################################
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
@@ -35,9 +36,9 @@
     defaultLocale = "en_US.UTF-8";
   };
 
-  # Set your time zone.
   time.timeZone = "Europe/Amsterdam";
-
+  ############################################################
+  
   #FONTS
   fonts = {
     fonts = with pkgs; [
@@ -67,7 +68,7 @@
     # wireless.userControlled.group = "network";
     useDHCP = false;
     # nameservers = [ "192.168.1.254" ];
-    wicd.enable = true;
+    # wicd.enable = true;
     # extraHosts = ''
     #   127.0.0.1 db
     # '';
@@ -76,37 +77,39 @@
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
    environment.systemPackages = with pkgs; [
-     # system
+     ## system
      xorg.xf86videonouveau
      xf86_video_nouveau 
      networkmanager
      chromium
      firefox
      fish
-     scrot
      #zsh
      #oh-my-zsh
      (pkgs.lib.mkOverride 10 st) # patched, see at the end of this file
+     ## termutils
      pstree
+     tree
+     scrot
 
-     # wm
+     ## wm
      i3
      i3status
      scrot
      rofi
      surfraw
   
-     # sound 
+     ## sound 
      pulseaudioFull
      cmus
      pamix
 
-     # video
+     ## video
      ffmpeg-full
      youtube-dl
      mpv
 
-     # programs
+     ## programs
      feh
      mc
      ranger
@@ -114,7 +117,7 @@
      zathura
      weechat
 
-     # dev tools
+     ## dev tools
      silver-searcher
      git
      emacs
@@ -122,7 +125,7 @@
      #vimPlugins.vundle
      tmux
 
-     # langs
+     ## langs
      ## Python
      python
      pypi2nix
@@ -135,7 +138,7 @@
      scala
      sbt
 
-     # utils
+     ## utils
      cron
      unzip
      curl
@@ -143,10 +146,6 @@
      lsof
    ];
 
-  #SSH
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-  # services.openssh.passwordAuthentication = false;
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
@@ -158,59 +157,69 @@
   hardware.pulseaudio.enable = true;
 
   # Enable the X11 windowing system.
-  services.xserver = {
-    enable = true;
-    autorun = true;
-    layout = "no";
+  services = {
+    # openssh = {
+    #   enable = true;
+    #   openssh.passwordAuthentication = false;
+    # };
     
-    windowManager.i3.enable = true;
-    #desktopManager.default = "none";
-    windowManager.default = "i3";
-   
-    xkbOptions = "eurosign:e, grp:alt_space_toggle, ctrl:nocaps";
-
-    synaptics = {
+    xserver = {
       enable = true;
-      palmDetect = true;
-      twoFingerScroll = true;
-    };
+      autorun = true;
+      layout = "no";
+    
+      windowManager.i3.enable = true;
+      #desktopManager.default = "none";
+      windowManager.default = "i3";
+   
+      xkbOptions = "eurosign:e, grp:alt_space_toggle, ctrl:nocaps";
 
-    #postgresql = {
-    #  enable = true;
-    #  package = pkgs.postgresql96;
-    #};  
+      synaptics = {
+        enable = true;
+        palmDetect = true;
+        twoFingerScroll = true;
+      };
+      
+      displayManager = {
+        slim.enable = false;
+        sddm.enable = false;
+        lightdm.enable = true;
+        lightdm.autoLogin.enable = false;
+        lightdm.autoLogin.user = "bbsl";
+      };
+      
+      #postgresql = {
+      #  enable = true;
+      #  package = pkgs.postgresql96;
+      #};  
   
-    #libinput = {
-    #enable = true;
-    #disableWhileTyping = true;
-    #};
-
-    displayManager = {
-      slim.enable = false;
-      sddm.enable = false;
-      lightdm.enable = true;
-      lightdm.autoLogin.enable = false;
-      lightdm.autoLogin.user = "bbsl";
+      #libinput = {
+      #enable = true;
+      #disableWhileTyping = true;
+      #};
     };
   };
 
   #Ghetto askpass disable so I dont get the annoying popup
-  programs.ssh.askPassword = "";
+  programs = {
+    ssh.askPassword = "";
+    ssh.startAgent = true;
 
-  #programs.vim.defaultEditor = true;
+    #vim.defaultEditor = true;
   
-  ##Z-shell
-  #programs.zsh = {
-  #  enable = false;
-  #  ohMyZsh.enable = true;
-  #  ohMyZsh.plugins = [ "git" ];
-  #  ohMyZsh.theme = "fishy";
-  #};
+    ##Z-shell
+    #zsh = {
+    #  enable = false;
+    #  ohMyZsh.enable = true;
+    #  ohMyZsh.plugins = [ "git" ];
+    #  ohMyZsh.theme = "fishy";
+    #};
   
-  #Fish
-  programs.fish = {
-    #loginShellInit = "";
-    enable = true;
+    #Fish
+    fish = {
+      #loginShellInit = "";
+      enable = true;
+    };
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -220,9 +229,9 @@
     isNormalUser = true;
     uid = 1000;
     extraGroups = ["wheel" "audio" "video" "networkmanager" ]; 
-    #openssh.authorizedKeys.keys = [ 
-    #  "ssh-rsa XXXX"
-    #];
+    # openssh.authorizedKeys.keys = [ 
+    #   "ssh-rsa "
+    # ];
   };
 
   # Patch with overlay
@@ -250,5 +259,4 @@
   # servers. You should change this only after NixOS release notes say you
   # should.
   system.stateVersion = "17.09"; # Did you read the comment?
-
 }
