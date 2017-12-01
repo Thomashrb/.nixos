@@ -28,6 +28,11 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  # https://nixos.wiki/wiki/ALSA
+  # Make your audio card the default ALSA card
+  boot.extraModprobeConfig = ''
+    options snd slots=snd-hda-intel
+  '';
 
   # Select internationalisation properties.
   i18n = {
@@ -83,6 +88,7 @@
      networkmanager
      chromium
      firefox
+     (pkgs.lib.mkOverride 10 surf)
      fish
      #zsh
      #oh-my-zsh
@@ -122,8 +128,9 @@
      git
      emacs
      neovim
-     #vimPlugins.vundle
      tmux
+     postgresql
+     redis
 
      ## langs
      ## Python
@@ -146,7 +153,6 @@
      lsof
    ];
 
-
   # Enable CUPS to print documents.
   # services.printing.enable = true;
   
@@ -163,6 +169,9 @@
     #   openssh.passwordAuthentication = false;
     # };
     
+    postgresql.enable = true;
+    postgresql.package = pkgs.postgresql94;
+        
     xserver = {
       enable = true;
       autorun = true;
@@ -187,12 +196,7 @@
         lightdm.autoLogin.enable = false;
         lightdm.autoLogin.user = "bbsl";
       };
-      
-      #postgresql = {
-      #  enable = true;
-      #  package = pkgs.postgresql96;
-      #};  
-  
+        
       #libinput = {
       #enable = true;
       #disableWhileTyping = true;
@@ -228,7 +232,7 @@
     home = "/home/bbsl";
     isNormalUser = true;
     uid = 1000;
-    extraGroups = ["wheel" "audio" "video" "networkmanager" ]; 
+    extraGroups = [ "wheel" "audio" "video" "networkmanager" ]; 
     # openssh.authorizedKeys.keys = [ 
     #   "ssh-rsa "
     # ];
@@ -236,6 +240,7 @@
 
   # Patch with overlay
   nixpkgs.overlays = [ (self: super: {
+    # Simple terminal
     st = super.st.override {
       patches = builtins.map super.fetchurl [
         #  { url = "https://st.suckless.org/patches/dracula/st-dracula-20170803-7f99032.diff";
@@ -251,6 +256,14 @@
             sha256 = "f721b15a5aa8d77a4b6b44713131c5f55e7fca04006bc0a3cb140ed51c14cfb6"; 
           }
         ];
+    };
+    # Surf browser
+    surf = super.surf.override {
+      patches = builtins.map super.fetchurl [
+        { url = "https://surf.suckless.org/patches/surf-spacesearch-20170408-b814567.diff";
+          sha256 = "4d69aa961419720b04333c13ce06cb98b37e957b68d69eec8f761391af5ba65a";
+        }
+      ];
     };
   }) ];
 
