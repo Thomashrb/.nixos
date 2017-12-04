@@ -28,11 +28,6 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  # https://nixos.wiki/wiki/ALSA
-  # Make your audio card the default ALSA card
-  boot.extraModprobeConfig = ''
-    options snd slots=snd-hda-intel
-  '';
 
   # Select internationalisation properties.
   i18n = {
@@ -97,6 +92,8 @@
      pstree
      tree
      scrot
+     slock
+     jq
 
      ## wm
      i3
@@ -131,6 +128,7 @@
      tmux
      postgresql
      redis
+     cpp-hocon
 
      ## langs
      ## Python
@@ -142,6 +140,7 @@
      cabal2nix
 
      ## Scala
+     jetbrains.jdk
      scala
      sbt
 
@@ -178,8 +177,8 @@
       layout = "no";
     
       windowManager.i3.enable = true;
-      #desktopManager.default = "none";
       windowManager.default = "i3";
+      desktopManager.default = "none";
    
       xkbOptions = "eurosign:e, grp:alt_space_toggle, ctrl:nocaps";
 
@@ -208,7 +207,9 @@
   programs = {
     ssh.askPassword = "";
     ssh.startAgent = true;
-
+    slock.enable = true;
+    fish.enable = true;
+    
     #vim.defaultEditor = true;
   
     ##Z-shell
@@ -217,13 +218,7 @@
     #  ohMyZsh.enable = true;
     #  ohMyZsh.plugins = [ "git" ];
     #  ohMyZsh.theme = "fishy";
-    #};
-  
-    #Fish
-    fish = {
-      #loginShellInit = "";
-      enable = true;
-    };
+    #};  
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
