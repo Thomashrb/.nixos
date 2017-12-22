@@ -84,9 +84,9 @@
      chromium
      firefox
      (pkgs.lib.mkOverride 10 surf)
-     fish
-     #zsh
-     #oh-my-zsh
+     #fish
+     zsh
+     oh-my-zsh
      (pkgs.lib.mkOverride 10 st) # patched, see at the end of this file
      ## termutils
      pstree
@@ -123,6 +123,7 @@
      ## dev tools
      silver-searcher
      git
+     nix-prefetch-git
      emacs
      neovim
      tmux
@@ -167,6 +168,8 @@
     #   enable = true;
     #   openssh.passwordAuthentication = false;
     # };
+
+    emacs.defaultEditor = true;
     
     postgresql.enable = true;
     postgresql.package = pkgs.postgresql94;
@@ -208,22 +211,22 @@
     ssh.askPassword = "";
     ssh.startAgent = true;
     slock.enable = true;
-    fish.enable = true;
+    #fish.enable = true;
     
     #vim.defaultEditor = true;
   
     ##Z-shell
-    #zsh = {
-    #  enable = false;
-    #  ohMyZsh.enable = true;
-    #  ohMyZsh.plugins = [ "git" ];
-    #  ohMyZsh.theme = "fishy";
-    #};  
+    zsh = {
+      enable = true;
+      ohMyZsh.enable = true;
+      ohMyZsh.plugins = [ "git" ];
+      ohMyZsh.theme = "lambda";
+    };  
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.extraUsers.bbsl = {
-    shell = pkgs.fish;
+    shell = pkgs.zsh;
     home = "/home/bbsl";
     isNormalUser = true;
     uid = 1000;
@@ -238,15 +241,12 @@
     # Simple terminal
     st = super.st.override {
       patches = builtins.map super.fetchurl [
-        #  { url = "https://st.suckless.org/patches/dracula/st-dracula-20170803-7f99032.diff";
-        #    sha256 = "4840b814dfa6c38f2aea87e622e1aaa255e411226907b50fb60623d2c70b01d4"; 
-        #  }
-        #  { url = "https://st.suckless.org/patches/solarized/st-no_bold_colors-0.7.diff";
-        #    sha256 = "2e8cdbeaaa79ed067ffcfdcf4c5f09fb5c8c984906cde97226d4dd219dda39dc"; 
-        #  }
-        #  { url = "https://st.suckless.org/patches/solarized/st-solarized-dark-0.7.diff";
-        #    sha256 = "4782f52c4147a352579586c1b066f9fd1da934e580cbd3b78943f058394d9883"; 
-        #  }
+          { url = "https://st.suckless.org/patches/solarized/st-no_bold_colors-0.7.diff";
+            sha256 = "2e8cdbeaaa79ed067ffcfdcf4c5f09fb5c8c984906cde97226d4dd219dda39dc"; 
+          }
+          { url = "https://st.suckless.org/patches/solarized/st-solarized-light-0.7.diff";
+            sha256 = "d3f28d2a78647e52e64ff2a41df96802787ea15deb168a585c09a9f5cf2ba066"; 
+          }
           { url = "https://st.suckless.org/patches/scrollback/st-scrollback-0.7.diff";
             sha256 = "f721b15a5aa8d77a4b6b44713131c5f55e7fca04006bc0a3cb140ed51c14cfb6"; 
           }
