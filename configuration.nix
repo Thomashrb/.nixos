@@ -26,8 +26,10 @@
   };
 
   # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader = {
+    systemd-boot.enable = true;
+    efi.canTouchEfiVariables = true;
+  };
 
   # Select internationalisation properties.
   i18n = {
@@ -83,15 +85,18 @@
      networkmanager
      chromium
      firefox
+     w3m
+     cacert
      (pkgs.lib.mkOverride 10 surf)
-     #fish
-     zsh
-     oh-my-zsh
+     fish
+     fzf
+     #zsh
+     #oh-my-zsh
      (pkgs.lib.mkOverride 10 st) # patched, see at the end of this file
      ## termutils
+     nix-repl
      pstree
      tree
-     scrot
      slock
      jq
 
@@ -131,7 +136,6 @@
      redis
      cpp-hocon
 
-     ## langs
      ## Python
      python
      pypi2nix
@@ -144,6 +148,10 @@
      jetbrains.jdk
      scala
      sbt
+
+     ## Rust
+     racer
+     rustfmt
 
      ## utils
      cron
@@ -211,22 +219,24 @@
     ssh.askPassword = "";
     ssh.startAgent = true;
     slock.enable = true;
-    #fish.enable = true;
+    fish.enable = true;
     
     #vim.defaultEditor = true;
   
     ##Z-shell
-    zsh = {
-      enable = true;
-      ohMyZsh.enable = true;
-      ohMyZsh.plugins = [ "git" ];
-      ohMyZsh.theme = "lambda";
-    };  
+    #zsh = {
+    #  enable = true;
+    #  syntaxHighlighting.enable = true;
+    #  ohMyZsh.enable = true;
+    #  ohMyZsh.plugins = [ "git" ];
+    #  ohMyZsh.theme = "gentoo";
+    #};
+    
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.extraUsers.bbsl = {
-    shell = pkgs.zsh;
+    shell = pkgs.fish;
     home = "/home/bbsl";
     isNormalUser = true;
     uid = 1000;
