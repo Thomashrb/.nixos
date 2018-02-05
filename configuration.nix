@@ -186,8 +186,8 @@
 
     mysql.package = pkgs.mariadb;
     mysql.enable = true;
-    #postgresql.enable = true;
-    #postgresql.package = pkgs.postgresql94;
+    postgresql.enable = true;
+    postgresql.package = pkgs.postgresql94;
 
     xserver = {
       enable = true;
