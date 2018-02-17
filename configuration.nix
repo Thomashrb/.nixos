@@ -102,6 +102,7 @@
      tree
      slock
      jq
+     fstrm
 
      ## wm
      i3
@@ -125,7 +126,6 @@
      mc
      ranger
      htop
-     #nmon
      zathura
      weechat
 
@@ -136,10 +136,10 @@
      emacs
      mu
      vim
-     #neovim
      tmux
-     mariadb
+     #mariadb
      #postgresql
+     postgresql_jdbc
      redis
      cpp-hocon
 
@@ -174,20 +174,25 @@
   #Video
   #videoDrivers = [ "intel" "modesetting" ];
 
-  #Sound
-  hardware.pulseaudio.enable = true;
-
-  # Enable the X11 windowing system.
   services = {
-    # openssh = {
-    #   enable = true;
-    #   openssh.passwordAuthentication = false;
-    # };
-
     mysql.package = pkgs.mariadb;
     mysql.enable = true;
+    # mysql.extraOptions = ''
+    #	log-bin=bin.log
+    #	log-bin-index=bin-log.index
+    #	max_binlog_size=100M
+    #	binlog_format=row
+    #	'';
+
     postgresql.enable = true;
     postgresql.package = pkgs.postgresql94;
+    postgresql.authentication = ''
+	# Generated file; do not edit!
+	local all all                trust
+	host  all all 127.0.0.1/32   trust
+	host  all all ::1/128        trust
+	host  all all 192.168.1.0/24 trust
+	'';
 
     xserver = {
       enable = true;
@@ -247,10 +252,7 @@
     home = "/home/bbsl";
     isNormalUser = true;
     uid = 1000;
-    extraGroups = [ "wheel" "audio" "video" "networkmanager" ];
-    # openssh.authorizedKeys.keys = [
-    #   "ssh-rsa "
-    # ];
+    extraGroups = [ "postgres" "wheel" "audio" "video" "networkmanager" ];
   };
 
   # Patch with overlay
