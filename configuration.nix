@@ -11,6 +11,8 @@
     allowBroken = true;
     import = "/home/bbsl/.config/nixpkgs/config.nix";
     allowUnfree = true;
+    #Build all packages with pa-support
+    pulseaudio = true;
   };
 
   nix = {
@@ -170,6 +172,9 @@
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
+
+  #Audio
+  hardware.pulseaudio.enable = true;
 
   #Video
   #videoDrivers = [ "intel" "modesetting" ];
