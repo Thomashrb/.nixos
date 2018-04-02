@@ -162,6 +162,9 @@
      rustracer
      rustfmt
 
+     ## JS
+     nodePackages.node2nix
+
      ## utils
      cron
      unzip
