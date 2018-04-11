@@ -90,7 +90,7 @@
      wpa_supplicant
      chromium
      firefox
-     w3m
+     newsboat
      cacert
      (pkgs.lib.mkOverride 10 surf)
      fish
@@ -214,17 +214,17 @@
       xkbOptions = "eurosign:e, grp:alt_space_toggle, ctrl:nocaps";
 
       synaptics = {
-	enable = true;
-	palmDetect = true;
-	twoFingerScroll = true;
+	      enable = true;
+	      palmDetect = true;
+	      twoFingerScroll = true;
       };
 
       displayManager = {
-	slim.enable = false;
-	sddm.enable = false;
-	lightdm.enable = true;
-	lightdm.autoLogin.enable = false;
-	lightdm.autoLogin.user = "bbsl";
+	      slim.enable = false;
+	      sddm.enable = false;
+	      lightdm.enable = true;
+	      lightdm.autoLogin.enable = false;
+	      lightdm.autoLogin.user = "bbsl";
       };
 
       #libinput = {
@@ -268,12 +268,12 @@
     # Simple terminal
     st = super.st.override {
       patches = builtins.map super.fetchurl [
-	  { url = "https://st.suckless.org/patches/solarized/st-no_bold_colors-0.7.diff";
-	    sha256 = "2e8cdbeaaa79ed067ffcfdcf4c5f09fb5c8c984906cde97226d4dd219dda39dc";
-	  }
-	  { url = "https://st.suckless.org/patches/solarized/st-solarized-light-0.7.diff";
-	    sha256 = "d3f28d2a78647e52e64ff2a41df96802787ea15deb168a585c09a9f5cf2ba066";
-	  }
+	  # { url = "https://st.suckless.org/patches/solarized/st-no_bold_colors-0.7.diff";
+	  #   sha256 = "2e8cdbeaaa79ed067ffcfdcf4c5f09fb5c8c984906cde97226d4dd219dda39dc";
+	  # }
+	  # { url = "https://st.suckless.org/patches/solarized/st-solarized-light-0.7.diff";
+	  #   sha256 = "d3f28d2a78647e52e64ff2a41df96802787ea15deb168a585c09a9f5cf2ba066";
+	  # }
 	  { url = "https://st.suckless.org/patches/scrollback/st-scrollback-0.7.diff";
 	    sha256 = "f721b15a5aa8d77a4b6b44713131c5f55e7fca04006bc0a3cb140ed51c14cfb6";
 	  }
@@ -293,5 +293,5 @@
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "17.09"; # Did you read the comment?
+ system.stateVersion = "18.03"; # Did you read the comment?
 }
