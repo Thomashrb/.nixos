@@ -17,11 +17,11 @@
 
   nix = {
     trustedBinaryCaches = [
-      "http://hydra.nixos.org"
+    ##  "http://hydra.nixos.org"
       "http://cache.nixos.org"
     ];
     binaryCaches = [
-      "http://hydra.nixos.org"
+    ##  "http://hydra.nixos.org"
       "http://cache.nixos.org"
     ];
     binaryCachePublicKeys = [ "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs=" ];
@@ -92,7 +92,6 @@
      firefox
      newsboat
      cacert
-     (pkgs.lib.mkOverride 10 surf)
      fish
      fzf
      #zsh
@@ -195,12 +194,12 @@
     postgresql.enable = true;
     postgresql.package = pkgs.postgresql94;
     postgresql.authentication = ''
-	# Generated file; do not edit!
-	local all all                trust
-	host  all all 127.0.0.1/32   trust
-	host  all all ::1/128        trust
-	host  all all 192.168.1.0/24 trust
-	'';
+  	# Generated file; do not edit!
+  	local all all                trust
+  	host  all all 127.0.0.1/32   trust
+  	host  all all ::1/128        trust
+  	host  all all 192.168.1.0/24 trust
+  	'';
 
     xserver = {
       enable = true;
@@ -260,7 +259,7 @@
     home = "/home/bbsl";
     isNormalUser = true;
     uid = 1000;
-    extraGroups = [ "postgres" "wheel" "audio" "video" "networkmanager" ];
+    extraGroups = [ "git" "postgres" "wheel" "audio" "video" "networkmanager" ];
   };
 
   # Patch with overlay
@@ -280,13 +279,13 @@
 	];
     };
     # Surf browser
-    surf = super.surf.override {
-      patches = builtins.map super.fetchurl [
-	{ url = "https://surf.suckless.org/patches/surf-spacesearch-20170408-b814567.diff";
-	  sha256 = "4d69aa961419720b04333c13ce06cb98b37e957b68d69eec8f761391af5ba65a";
-	}
-      ];
-    };
+    #    surf = super.surf.override {
+    #      patches = builtins.map super.fetchurl [
+    #	{ url = "https://surf.suckless.org/patches/surf-spacesearch-20170408-b814567.diff";
+    #	  sha256 = "4d69aa961419720b04333c13ce06cb98b37e957b68d69eec8f761391af5ba65a";
+    #	}
+    #  ];
+    # };
   }) ];
 
   # This value determines the NixOS release with which your system is to be
