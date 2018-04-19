@@ -17,11 +17,9 @@
 
   nix = {
     trustedBinaryCaches = [
-    ##  "http://hydra.nixos.org"
       "http://cache.nixos.org"
     ];
     binaryCaches = [
-    ##  "http://hydra.nixos.org"
       "http://cache.nixos.org"
     ];
     binaryCachePublicKeys = [ "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs=" ];
@@ -64,19 +62,6 @@
   networking = {
     hostName = "nixos";
     networkmanager.enable = true;
-    # hostId = "847849e7";
-    # interfaceMonitor.enable = false;
-    # wireless.enable = true;
-    # wireless.interfaces = [ "wlp4s0" ];
-    # wireless.userControlled.enable = true;
-    # wireless.userControlled.group = "network";
-    # useDHCP = false;
-    # nameservers = [ "192.168.1.254" ];
-    # wicd.enable = true;
-    # extraHosts = ''
-    #   127.0.0.1 db
-    # '';
-    # wpa supplicant
   };
 
   # List packages installed in system profile. To search by name, run:
@@ -106,11 +91,15 @@
      fstrm
 
      ## wm
-     i3
-     i3status
+     #i3
+     #i3status
      scrot
      rofi
      surfraw
+     haskellPackages.xmobar
+     haskellPackages.xmonad
+     haskellPackages.xmonad-contrib
+     haskellPackages.xmonad-extras
 
      ## sound
      pulseaudioFull
@@ -138,7 +127,8 @@
      mu
      vim
      tmux
-     #mariadb
+     taskwarrior
+
      #postgresql
      postgresql_jdbc
      redis
@@ -172,7 +162,7 @@
      lsof
    ];
 
-  # Enable CUPS to print documents.
+  # Enable CUPS to print.
   # services.printing.enable = true;
 
   #Audio
@@ -182,14 +172,16 @@
   #videoDrivers = [ "intel" "modesetting" ];
 
   services = {
-    mysql.package = pkgs.mariadb;
-    mysql.enable = true;
+    # mysql.package = pkgs.mariadb;
+    # mysql.enable = true;
     # mysql.extraOptions = ''
     #	log-bin=bin.log
     #	log-bin-index=bin-log.index
     #	max_binlog_size=100M
     #	binlog_format=row
     #	'';
+
+    redis.enable = true;
 
     postgresql.enable = true;
     postgresql.package = pkgs.postgresql94;
@@ -206,8 +198,10 @@
       autorun = true;
       layout = "no";
 
-      windowManager.i3.enable = true;
-      windowManager.default = "i3";
+      windowManager.xmonad.enable = true;
+      windowManager.xmonad.enableContribAndExtras = true;
+      # windowManager.i3.enable = true;
+      windowManager.default = "xmonad";
       desktopManager.default = "none";
 
       xkbOptions = "eurosign:e, grp:alt_space_toggle, ctrl:nocaps";
@@ -259,7 +253,7 @@
     home = "/home/bbsl";
     isNormalUser = true;
     uid = 1000;
-    extraGroups = [ "git" "postgres" "wheel" "audio" "video" "networkmanager" ];
+    extraGroups = [ "redis" "git" "postgres" "wheel" "audio" "video" "networkmanager" ];
   };
 
   # Patch with overlay
