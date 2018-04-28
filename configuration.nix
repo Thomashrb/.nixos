@@ -9,6 +9,7 @@
 
   nixpkgs.config = {
     allowBroken = true;
+    # Override
     import = "/home/bbsl/.config/nixpkgs/config.nix";
     allowUnfree = true;
     #Build all packages with pa-support
@@ -75,7 +76,6 @@
      wpa_supplicant
      chromium
      firefox
-     newsboat
      cacert
      fish
      fzf
@@ -118,6 +118,7 @@
      htop
      zathura
      weechat
+     weechat-matrix-bridge
 
      ## dev tools
      silver-searcher
@@ -135,7 +136,6 @@
      cpp-hocon
 
      ## Python
-     python
      pypi2nix
 
      ## Haskell
@@ -146,10 +146,6 @@
      jetbrains.jdk
      scala
      sbt
-
-     ## Rust
-     rustracer
-     rustfmt
 
      ## JS
      nodePackages.node2nix
@@ -182,16 +178,7 @@
     #	'';
 
     redis.enable = true;
-
     postgresql.enable = true;
-    postgresql.package = pkgs.postgresql94;
-    postgresql.authentication = ''
-  	# Generated file; do not edit!
-  	local all all                trust
-  	host  all all 127.0.0.1/32   trust
-  	host  all all ::1/128        trust
-  	host  all all 192.168.1.0/24 trust
-  	'';
 
     xserver = {
       enable = true;
