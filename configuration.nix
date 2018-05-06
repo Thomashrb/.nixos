@@ -77,7 +77,7 @@
      chromium
      firefox
      cacert
-     fish
+     # fish
      fzf
      #zsh
      #oh-my-zsh
@@ -150,6 +150,9 @@
      ## JS
      nodePackages.node2nix
 
+     ## rust
+     cargo
+
      ## utils
      cron
      unzip
@@ -219,7 +222,7 @@
     ssh.askPassword = "";
     ssh.startAgent = true;
     slock.enable = true;
-    fish.enable = true;
+    # fish.enable = true;
 
     vim.defaultEditor = true;
 
@@ -236,7 +239,7 @@
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.extraUsers.bbsl = {
-    shell = pkgs.fish;
+    shell = pkgs.bash;
     home = "/home/bbsl";
     isNormalUser = true;
     uid = 1000;
