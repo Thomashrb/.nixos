@@ -27,6 +27,7 @@
   };
 
   # Use the systemd-boot EFI boot loader.
+  boot.tmpOnTmpfs = true;
   boot.loader = {
     systemd-boot.enable = true;
     efi.canTouchEfiVariables = true;
@@ -130,7 +131,7 @@
      tmux
      taskwarrior
 
-     #postgresql
+     postgresql
      postgresql_jdbc
      redis
      cpp-hocon
@@ -167,6 +168,9 @@
   #Audio
   hardware.pulseaudio.enable = true;
 
+  #Spectre
+  hardware.cpu.intel.updateMicrocode = true;
+
   #Video
   #videoDrivers = [ "intel" "modesetting" ];
 
@@ -182,6 +186,7 @@
 
     redis.enable = true;
     postgresql.enable = true;
+    postgresql.enableTCPIP = true;
 
     xserver = {
       enable = true;
@@ -225,6 +230,7 @@
     # fish.enable = true;
 
     vim.defaultEditor = true;
+    bash.enableCompletion = true;
 
     ##Z-shell
     #zsh = {
