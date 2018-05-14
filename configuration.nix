@@ -28,10 +28,10 @@
 
   # Use the systemd-boot EFI boot loader.
   boot.tmpOnTmpfs = true;
-  boot.loader = {
-    systemd-boot.enable = true;
-    efi.canTouchEfiVariables = true;
-  };
+  boot.loader.systemd-boot.enable = true;
+  # Brick?
+  #   efi.canTouchEfiVariables = true;
+  # };
 
   # Select internationalisation properties.
   i18n = {
