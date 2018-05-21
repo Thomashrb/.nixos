@@ -104,8 +104,9 @@
 
      ## sound
      pulseaudioFull
+     alsaUtils
+     # pamix ## alsaUtils used instead
      cmus
-     pamix
 
      ## video
      ffmpeg-full
@@ -175,8 +176,8 @@
   #videoDrivers = [ "intel" "modesetting" ];
 
   services = {
-    # mysql.package = pkgs.mariadb;
-    # mysql.enable = true;
+    mysql.package = pkgs.mariadb;
+    mysql.enable = true;
     # mysql.extraOptions = ''
     #	log-bin=bin.log
     #	log-bin-index=bin-log.index
