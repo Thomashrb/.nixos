@@ -70,7 +70,7 @@
   # $ nix-env -qaP | grep wget
    environment.systemPackages = with pkgs; [
      ## system
-     xorg.xf86videonouveau
+     #xorg.xf86videonouveau
      xf86_video_nouveau
      networkmanager
      networkmanagerapplet
@@ -101,6 +101,7 @@
      haskellPackages.xmonad
      haskellPackages.xmonad-contrib
      haskellPackages.xmonad-extras
+     autorandr
 
      ## sound
      pulseaudioFull
@@ -172,8 +173,6 @@
   #Spectre
   hardware.cpu.intel.updateMicrocode = true;
 
-  #Video
-  #videoDrivers = [ "intel" "modesetting" ];
 
   services = {
     mysql.package = pkgs.mariadb;
@@ -190,6 +189,9 @@
     postgresql.enableTCPIP = true;
 
     xserver = {
+      #Video
+      videoDrivers = [ "intel" "modesetting" ];
+
       enable = true;
       autorun = true;
       layout = "no";
