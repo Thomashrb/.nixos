@@ -10,10 +10,18 @@
   nixpkgs.config = {
     allowBroken = true;
     # Override
-    import = "/home/bbsl/.config/nixpkgs/config.nix";
+    #import = "/home/bbsl/.config/nixpkgs/config.nix";   # bad form?
     allowUnfree = true;
     #Build all packages with pa-support
     pulseaudio = true;
+  };
+
+  virtualisation = {
+    virtualbox = {
+      host.enable = true;
+      host.addNetworkInterface = true;
+    };
+    libvirtd.enable = true;
   };
 
   nix = {
@@ -29,8 +37,6 @@
   # Use the systemd-boot EFI boot loader.
   boot.tmpOnTmpfs = true;
   boot.loader.systemd-boot.enable = true;
-  # Brick?
-  #   efi.canTouchEfiVariables = true;
   # };
 
   # Select internationalisation properties.
@@ -63,6 +69,10 @@
   #NETWORK
   networking = {
     hostName = "nixos";
+    extraHosts =
+    ''
+    192.168.56.101 streamstore.beat.local
+    '';
     networkmanager.enable = true;
   };
 
@@ -78,10 +88,8 @@
      chromium
      firefox
      cacert
-     # fish
-     fzf
-     #zsh
-     #oh-my-zsh
+     zsh
+     oh-my-zsh
      (pkgs.lib.mkOverride 10 st) # patched, see at the end of this file
      ## termutils
      nix-repl
@@ -132,11 +140,13 @@
      vim
      tmux
      taskwarrior
+     virtualbox
 
      postgresql
      postgresql_jdbc
      redis
      cpp-hocon
+     imagemagickBig
 
      ## Python
      pypi2nix
@@ -173,8 +183,18 @@
   #Spectre
   hardware.cpu.intel.updateMicrocode = true;
 
-
   services = {
+  #      nginx = {
+  #         package = pkgs.nginx.override {
+  #                   modules = with pkgs.nginxModules;
+  #                   [ lua ];
+  #                   };
+  #      user = "bbsl";
+  #      enable = true;
+  #      appendHttpConfig = ''
+  #      '';
+  #   };
+
     mysql.package = pkgs.mariadb;
     mysql.enable = true;
     # mysql.extraOptions = ''
@@ -191,7 +211,6 @@
     xserver = {
       #Video
       videoDrivers = [ "intel" "modesetting" ];
-
       enable = true;
       autorun = true;
       layout = "no";
@@ -230,30 +249,37 @@
     ssh.askPassword = "";
     ssh.startAgent = true;
     slock.enable = true;
-    # fish.enable = true;
 
     vim.defaultEditor = true;
     bash.enableCompletion = true;
 
     ##Z-shell
-    #zsh = {
-    #  enable = true;
-    #  syntaxHighlighting.enable = true;
-    #  ohMyZsh.enable = true;
-    #  ohMyZsh.plugins = [ "git" ];
-    #  ohMyZsh.theme = "gentoo";
-    #};
+    zsh = {
+      enable = true;
+      syntaxHighlighting.enable = true;
+      ohMyZsh.enable = true;
+      ohMyZsh.plugins = [ "git" ];
+      ohMyZsh.theme = "fishy";
+    };
 
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.extraUsers.bbsl = {
-    shell = pkgs.bash;
+    shell = pkgs.zsh;
     home = "/home/bbsl";
     isNormalUser = true;
     uid = 1000;
-    extraGroups = [ "redis" "git" "postgres" "wheel" "audio" "video" "networkmanager" ];
+    extraGroups = [ "vboxusers"
+                    "redis"
+                    "git"
+                    "postgres"
+                    "wheel"
+                    "audio"
+                    "video"
+                    "networkmanager" ];
   };
+  users.extraGroups.vboxusers.members = [ "bbsl" ];
 
   # Patch with overlay
   nixpkgs.overlays = [ (self: super: {
