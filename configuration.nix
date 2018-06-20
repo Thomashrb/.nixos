@@ -72,6 +72,8 @@
     extraHosts =
     ''
     192.168.56.101 streamstore.beat.local
+    127.0.0.1 catalogservice.beat.local
+    127.0.0.1 deliveryservice.beat.local
     '';
     networkmanager.enable = true;
   };
@@ -118,7 +120,6 @@
      cmus
 
      ## video
-     ffmpeg-full
      youtube-dl
      mpv
 
@@ -145,8 +146,16 @@
      postgresql
      postgresql_jdbc
      redis
-     cpp-hocon
+
+     ## beat-delivery
+     # delivery-processor
+     jpegoptim
+     ffmpeg-full
      imagemagickBig
+     gpac
+     id3lib
+     # catalogservice/deliveryservice
+     cpp-hocon
 
      ## Python
      pypi2nix
