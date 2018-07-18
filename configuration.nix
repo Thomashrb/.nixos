@@ -1,12 +1,10 @@
 { config, pkgs, ... }:
-
 {
   ###########################################################
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
-
   nixpkgs.config = {
     allowBroken = true;
     # Override
@@ -71,7 +69,7 @@
     hostName = "nixos";
     extraHosts =
     ''
-    192.168.56.101 streamstore.beat.local
+    192.168.56.3 streamstore.beat.local
     127.0.0.1 catalogservice.beat.local
     127.0.0.1 deliveryservice.beat.local
     '';
@@ -83,7 +81,7 @@
    environment.systemPackages = with pkgs; [
      ## system
      #xorg.xf86videonouveau
-     xf86_video_nouveau
+     #xf86_video_nouveau
      networkmanager
      networkmanagerapplet
      wpa_supplicant
@@ -124,6 +122,9 @@
      mpv
 
      ## programs
+     nixops
+     mutt
+     thunderbird
      feh
      mc
      ranger
@@ -133,8 +134,10 @@
      weechat-matrix-bridge
 
      ## dev tools
+     #ansible
      silver-searcher
      git
+     gitAndTools.gitflow
      nix-prefetch-git
      emacs
      mu
@@ -226,26 +229,25 @@
 
       windowManager.xmonad.enable = true;
       windowManager.xmonad.enableContribAndExtras = true;
-      # windowManager.i3.enable = true;
+      #windowManager.i3.enable = true;
       windowManager.default = "xmonad";
       desktopManager.default = "none";
 
       xkbOptions = "eurosign:e, grp:alt_space_toggle, ctrl:nocaps";
 
-      synaptics = {
-	      enable = true;
-	      palmDetect = true;
-	      twoFingerScroll = true;
-      };
-
       displayManager = {
-	      slim.enable = false;
-	      sddm.enable = false;
 	      lightdm.enable = true;
-	      lightdm.autoLogin.enable = false;
+	      lightdm.autoLogin.enable = true;
+        lightdm.greeter.enable = false;
+	      lightdm.autoLogin.timeout = 0;
 	      lightdm.autoLogin.user = "bbsl";
       };
 
+      # synaptics = {
+	    #   enable = true;
+	    #   palmDetect = true;
+	    #   twoFingerScroll = true;
+      # };
       #libinput = {
       #enable = true;
       #disableWhileTyping = true;
@@ -267,7 +269,8 @@
       enable = true;
       syntaxHighlighting.enable = true;
       ohMyZsh.enable = true;
-      ohMyZsh.plugins = [ "git" ];
+      ohMyZsh.plugins = [ "git"
+                          "git-flow" ];
       ohMyZsh.theme = "fishy";
     };
 
@@ -304,17 +307,9 @@
 	  { url = "https://st.suckless.org/patches/scrollback/st-scrollback-0.7.diff";
 	    sha256 = "f721b15a5aa8d77a4b6b44713131c5f55e7fca04006bc0a3cb140ed51c14cfb6";
 	  }
-	];
+      ];
     };
-    # Surf browser
-    #    surf = super.surf.override {
-    #      patches = builtins.map super.fetchurl [
-    #	{ url = "https://surf.suckless.org/patches/surf-spacesearch-20170408-b814567.diff";
-    #	  sha256 = "4d69aa961419720b04333c13ce06cb98b37e957b68d69eec8f761391af5ba65a";
-    #	}
-    #  ];
-    # };
-  }) ];
+  })];
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
