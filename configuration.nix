@@ -87,6 +87,7 @@
      wpa_supplicant
      chromium
      firefox
+     qutebrowser
      cacert
      zsh
      oh-my-zsh
@@ -219,6 +220,14 @@
     redis.enable = true;
     postgresql.enable = true;
     postgresql.enableTCPIP = true;
+    postgresql.package = pkgs.postgresql94;
+    postgresql.authentication = pkgs.lib.mkForce ''
+      # Generated file; do not edit!
+      # TYPE  DATABASE        USER            ADDRESS                 METHOD
+      local   all             all                                     trust
+      host    all             all             127.0.0.1/32            trust
+      host    all             all             ::1/128                 trust
+      '';
 
     xserver = {
       #Video
