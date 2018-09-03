@@ -5,10 +5,9 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
+
   nixpkgs.config = {
     allowBroken = true;
-    # Override
-    #import = "/home/bbsl/.config/nixpkgs/config.nix";   # bad form?
     allowUnfree = true;
     #Build all packages with pa-support
     pulseaudio = true;
@@ -87,11 +86,11 @@
      wpa_supplicant
      chromium
      firefox
-     qutebrowser
+     #qutebrowser
      cacert
      zsh
      oh-my-zsh
-     (pkgs.lib.mkOverride 10 st) # patched, see at the end of this file
+     (lib.mkOverride 10 st) # patched, see at the end of this file
      ## termutils
      nix-repl
      pstree
@@ -99,13 +98,15 @@
      slock
      jq
      fstrm
+     nix-index
 
      ## wm
      #i3
      #i3status
      scrot
+
      rofi
-     surfraw
+     #dmenu
      haskellPackages.xmobar
      haskellPackages.xmonad
      haskellPackages.xmonad-contrib
@@ -135,7 +136,7 @@
      weechat-matrix-bridge
 
      ## dev tools
-     #ansible
+     ansible
      silver-searcher
      git
      gitAndTools.gitflow
@@ -147,7 +148,7 @@
      taskwarrior
      virtualbox
 
-     postgresql
+     #postgresql100 # 10.x
      postgresql_jdbc
      redis
 
@@ -197,16 +198,30 @@
   hardware.cpu.intel.updateMicrocode = true;
 
   services = {
-  #      nginx = {
-  #         package = pkgs.nginx.override {
-  #                   modules = with pkgs.nginxModules;
-  #                   [ lua ];
-  #                   };
-  #      user = "bbsl";
-  #      enable = true;
-  #      appendHttpConfig = ''
-  #      '';
-  #   };
+    nginx = {
+       # package = pkgs.nginx.override {
+       #           modules = with pkgs.nginxModules;
+       #           [ lua ];
+       #           };
+       user = "bbsl";
+       enable = true;
+       appendHttpConfig = ''
+        '';
+    };
+
+    # uwsgi = {
+    #   enable = true;
+    #   plugins = [ "python3" "php" ];
+    #   instance = {
+    #     type = "normal";
+    #   };
+    # };
+
+
+    # traefik = {
+    #         enable = true;
+    #         configFile = /home/bbsl/Git/beat-dev/traefik.toml;
+    # };
 
     mysql.package = pkgs.mariadb;
     mysql.enable = true;
@@ -220,7 +235,7 @@
     redis.enable = true;
     postgresql.enable = true;
     postgresql.enableTCPIP = true;
-    postgresql.package = pkgs.postgresql94;
+    postgresql.package = pkgs.postgresql100;
     postgresql.authentication = pkgs.lib.mkForce ''
       # Generated file; do not edit!
       # TYPE  DATABASE        USER            ADDRESS                 METHOD
@@ -231,14 +246,15 @@
 
     xserver = {
       #Video
-      videoDrivers = [ "intel" "modesetting" ];
+      videoDrivers = [ "intel" ];  ## "modesetting"
       enable = true;
       autorun = true;
       layout = "no";
 
+      # windowManager.dwm.enable = true;
       windowManager.xmonad.enable = true;
-      windowManager.xmonad.enableContribAndExtras = true;
-      #windowManager.i3.enable = true;
+      # windowManager.xmonad.enableContribAndExtras = true;
+      # windowManager.i3.enable = true;
       windowManager.default = "xmonad";
       desktopManager.default = "none";
 
@@ -257,10 +273,10 @@
 	    #   palmDetect = true;
 	    #   twoFingerScroll = true;
       # };
-      #libinput = {
-      #enable = true;
-      #disableWhileTyping = true;
-      #};
+      # libinput = {
+      # enable = true;
+      # disableWhileTyping = true;
+      # };
     };
   };
 
@@ -307,18 +323,25 @@
     # Simple terminal
     st = super.st.override {
       patches = builtins.map super.fetchurl [
-	  # { url = "https://st.suckless.org/patches/solarized/st-no_bold_colors-0.7.diff";
-	  #   sha256 = "2e8cdbeaaa79ed067ffcfdcf4c5f09fb5c8c984906cde97226d4dd219dda39dc";
-	  # }
-	  # { url = "https://st.suckless.org/patches/solarized/st-solarized-light-0.7.diff";
-	  #   sha256 = "d3f28d2a78647e52e64ff2a41df96802787ea15deb168a585c09a9f5cf2ba066";
-	  # }
 	  { url = "https://st.suckless.org/patches/scrollback/st-scrollback-0.7.diff";
 	    sha256 = "f721b15a5aa8d77a4b6b44713131c5f55e7fca04006bc0a3cb140ed51c14cfb6";
 	  }
       ];
     };
-  })];
+    # dwm = super.dwm.override {
+    #    patches = builtins.map super.fetchurl [
+	  #  { url = "https://dwm.suckless.org/patches/alpha/dwm-alpha-6.1.diff";
+	  #    sha256 = null; #wildman
+	  #  }
+    # { conf = builtins.readFile /home/bbsl/.config/dwm/config.h; }
+    # { url = "https://raw.githubusercontent.com/Thomashrb/dwmwinkey/master/dwm-mod124-6.1.patch";
+	  #   sha256 = null; #wildman
+	  # }
+     #  ];
+     # };
+    })
+    (import ./overlays/dwm )
+  ];
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
