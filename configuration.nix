@@ -105,12 +105,16 @@
      #i3status
      scrot
 
-     rofi
-     #dmenu
-     haskellPackages.xmobar
-     haskellPackages.xmonad
-     haskellPackages.xmonad-contrib
-     haskellPackages.xmonad-extras
+
+     dmenu
+     dwm
+     acpi
+     # haskellPackages.xmobar
+     # haskellPackages.xmonad
+     # haskellPackages.xmonad-contrib
+     # haskellPackages.xmonad-extras
+     #rofi
+
      autorandr
 
      ## sound
@@ -120,7 +124,7 @@
      cmus
 
      ## video
-     youtube-dl
+     # youtube-dl
      mpv
 
      ## programs
@@ -144,6 +148,7 @@
      emacs
      mu
      vim
+     vimPlugins.sensible
      tmux
      taskwarrior
      virtualbox
@@ -178,7 +183,7 @@
      nodePackages.node2nix
 
      ## rust
-     cargo
+     # cargo
 
      ## utils
      cron
@@ -251,11 +256,11 @@
       autorun = true;
       layout = "no";
 
-      # windowManager.dwm.enable = true;
-      windowManager.xmonad.enable = true;
+      windowManager.dwm.enable = true;
+      # windowManager.xmonad.enable = true;
       # windowManager.xmonad.enableContribAndExtras = true;
       # windowManager.i3.enable = true;
-      windowManager.default = "xmonad";
+      windowManager.default = "dwm";
       desktopManager.default = "none";
 
       xkbOptions = "eurosign:e, grp:alt_space_toggle, ctrl:nocaps";
@@ -340,7 +345,7 @@
      #  ];
      # };
     })
-    (import ./overlays/dwm )
+    (import ./overlays/suckless )
   ];
 
   # This value determines the NixOS release with which your system is to be

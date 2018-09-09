@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   ## own source prepatched etc
   src = fetchgit {
     url = "https://github.com/Thomashrb/dwm_patched.git";
-    rev = "e047be4914c44b0ca52a4b6f3a021c70dc5c3b2b";
+    rev = "3ee7e12c4d1e59e8456e0b0764b260968c2f1aa2";
     sha256 = null;
   };
 
