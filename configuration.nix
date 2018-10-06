@@ -86,6 +86,7 @@
      wpa_supplicant
      chromium
      firefox
+     keepassxc
      #qutebrowser
      cacert
      zsh
@@ -142,6 +143,7 @@
      ## dev tools
      ansible
      silver-searcher
+     ripgrep
      git
      gitAndTools.gitflow
      nix-prefetch-git
@@ -185,6 +187,12 @@
      ## rust
      # cargo
 
+     ## php
+     # php
+     # zeromq
+     # phpPackages.zmq
+     # phpPackages.apcu
+
      ## utils
      cron
      unzip
@@ -203,6 +211,12 @@
   hardware.cpu.intel.updateMicrocode = true;
 
   services = {
+    # phpfpm.phpPackage = pkgs.php;
+    # phpfpm.phpOptions = ''
+    #    extension=${pkgs.phpPackages.zmq}/lib/php/extensions/zmq.so
+    #    extension=${pkgs.phpPackages.apcu}/lib/php/extensions/apcu.so
+    # '';
+
     nginx = {
        # package = pkgs.nginx.override {
        #           modules = with pkgs.nginxModules;
